@@ -6,19 +6,18 @@ var longestConsecutive = function(nums) {
     if(nums.length === 0){
         return nums.length;
     }
-    const set = new Set(nums);
-    let maxSeq = 0;
-    for(const num of set){
-        if(!set.has(num - 1)){
-            let currNum = num;
-            let currSeq = 1;
-
-            while(set.has(currNum + 1)){
-                currNum += 1;
-                currSeq++;
-            }
-            maxSeq = Math.max(maxSeq,currSeq);
+    nums.sort((a,b) => a - b);
+    let lastSmaller = -Infinity;
+    let cnt = 0, longest = 1;
+    for(let i=0;i<nums.length;i++){
+        if(nums[i] - 1 === lastSmaller){
+            cnt += 1;
+            lastSmaller = nums[i];
+        }else if(nums[i] !== lastSmaller){
+            cnt = 1;
+            lastSmaller = nums[i];
         }
+        longest = Math.max(longest, cnt);
     }
-    return maxSeq;
+    return longest;
 };
