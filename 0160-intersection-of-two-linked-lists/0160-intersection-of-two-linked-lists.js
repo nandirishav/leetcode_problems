@@ -12,26 +12,40 @@
  * @return {ListNode}
  */
 var getIntersectionNode = function(headA, headB) {
-    const set = new Set();
-    if(headA === headB){
-        return headA;
-    }
-    let temp1 = headA;
-    set.add(temp1);
-    while(temp1.next) {
-        set.add(temp1.next);
-        temp1 = temp1.next;
-    }
-    let temp2 = headB;
-    if(set.has(temp2)){
-        return temp2;
-    }
-    while(temp2) {
-        if(set.has(temp2.next)){
-            temp2 = temp2.next;
-            return temp2;
+    let dummy1 = headA;
+    let dummy2 = headB;
+    let l1 = l2 = 0;
+
+    while(dummy1 || dummy2) {
+        if (dummy1){
+            l1++;
+            dummy1 = dummy1.next;
+        } 
+        if(dummy2){
+            l2++;
+            dummy2 = dummy2.next;
         }
-        temp2 = temp2.next;
+    }
+    let diff = Math.abs(l1 - l2);
+    dummy1 = headA;
+    dummy2 = headB;
+    if(l1 > l2) {        
+        while(diff) {
+            dummy1 = dummy1.next;
+            diff--;
+        }
+    }else {
+        while(diff) {
+            dummy2 = dummy2.next;
+            diff--;
+        }
+    }
+    while(dummy1 && dummy2) {
+        if(dummy1 === dummy2) return dummy1;
+        else{
+            dummy1 = dummy1.next;
+            dummy2 = dummy2.next;
+        }
     }
     return null;
 };
