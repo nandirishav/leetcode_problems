@@ -3,10 +3,17 @@
  * @return {number}
  */
 var maxProduct = function(n) {
-    const str = String(n);
-    const arr = str.split('');
-    const sortedArr = arr.sort((a,b) => a - b);
-    const len = sortedArr.length;
-    const ans = sortedArr[len - 1] * sortedArr[len - 2];
-    return ans;
+    const digits = String(n).split('').map(Number);
+    let max1 = 0, max2 = 0;
+
+    for (let digit of digits) {
+        if (digit > max1) {
+        max2 = max1;
+        max1 = digit;
+        } else if (digit > max2) {
+        max2 = digit;
+        }
+    }
+
+    return max1 * max2;
 };
