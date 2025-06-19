@@ -11,22 +11,24 @@
  * @return {number[][]}
  */
 var levelOrder = function(root) {
-    const ans = [];
-    if(root == null) return ans;
+     const result = [];
 
-    const queue = [];
+    function traverse(node, level) {
+        if (!node) return;
 
-    queue.push(root);
-    while(queue.length) {
-        const n = queue.length;
-        const level = [];
-        for(let i=0;i<n;i++){
-            const node = queue.shift();
-            if(node.left) queue.push(node.left);
-            if(node.right) queue.push(node.right); 
-            level.push(node.val);
+        // If visiting this level for the first time, add a new array
+        if (result.length === level) {
+            result.push([]);
         }
-        ans.push(level)
+
+        // Add the current node's value to its level
+        result[level].push(node.val);
+
+        // Recurse to left and right child, increasing level
+        traverse(node.left, level + 1);
+        traverse(node.right, level + 1);
     }
-    return ans;
+
+    traverse(root, 0);
+    return result;
 };
