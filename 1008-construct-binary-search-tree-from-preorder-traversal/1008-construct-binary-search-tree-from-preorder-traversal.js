@@ -10,29 +10,24 @@
  * @param {number[]} preorder
  * @return {TreeNode}
  */
-
-function insertIntoBST(root, val) {
-    if (val < root.val) {
-        if (root.left === null) {
-            root.left = new TreeNode(val);
-        } else {
-            insertIntoBST(root.left, val);
-        }
-    } else {
-        if (root.right === null) {
-            root.right = new TreeNode(val);
-        } else {
-            insertIntoBST(root.right, val);
-        }
-    }
-}
-
 var bstFromPreorder = function(preorder) {
-    if (preorder.length === 0) return null;
-
-    const root = new TreeNode(preorder[0]);
-    for (let i = 1; i < preorder.length; i++) {
-        insertIntoBST(root, preorder[i]);
+    const inorder = [...preorder].sort((a,b) => a - b);
+    // create the hashmap for inorder
+    const inorderMap = new Map();
+    for(let i=0;i<inorder.length;i++){
+        inorderMap.set(inorder[i], i);
     }
-    return root;
+    let preorderRootIndex = 0;
+    const buildBst = function (left,right) {
+        if(left > right) return null;
+        const rootVal = preorder[preorderRootIndex++];
+        const root = new TreeNode(rootVal);
+        const index = inorderMap.get(rootVal);
+
+        root.left = buildBst(left, index - 1);
+        root.right = buildBst(index + 1, right);
+
+        return root;
+    }
+    return buildBst(0, inorder.length - 1);
 };
